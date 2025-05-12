@@ -22,6 +22,8 @@ I then plotted the two lines on the same plot with different axes. While the dat
 
 ETA: I  never saved the .dropna() dataframe and thus changed my previous graph because while "depth_km" remained unaffected, "duration_magnitude_md" plot line changed dramatically! Oops!
 
+ETA2: Perhaps I should have left the NaN in because it did not change the graph of that line, but it most certainly made a difference in the magnitude variable.
+
 Graph:
 
 ![pydytuesday05 13 25](https://github.com/user-attachments/assets/f355bebf-9bfb-4e31-8a89-9321b3df726f)
