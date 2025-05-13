@@ -24,6 +24,64 @@ ETA: I  never saved the .dropna() dataframe and thus changed my previous graph b
 
 ETA2: Perhaps I should have left the NaN in because it did not change the graph of that line, but it most certainly made a difference in the magnitude variable.
 
+ETA3: So in the discussion on Bluesky on 05/12, I arguably should have left the NaN data in the dataframe because Python/Pandas ignores the NaN data according to this Stack Overflow: https://stackoverflow.com/questions/50711535/how-to-calculate-medians-using-pandas-with-nan-values.  Given that the data from the "magnitude" variable was complete, it shouldn't be deleted given the NaN in the other variable being ignored and since there is such a significant change.
+
+### Additional Question(s)
+1. Should the graphs be on separate graphs rather than combined? I can see how having them on the same chart allows for some easy to see relationships, but also they also seem unrelated at the same time, but perhpas not.
+
+
+### New Graph and Code with NaN data included
+Graph:
+
+![pydytuesday05 13 25](https://github.com/user-attachments/assets/a001e919-c29c-4e64-9191-a95ba1912098)
+
+Code:
+```
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import datetime as dt
+df = pd.read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-05-13/vesuvius.csv')
+df.head()
+df.shape
+df.info()
+df['review_level'].unique()
+df.isna()
+df.groupby(['review_level', 'year']).count()
+df_13to24 = df[df['year'].isin([2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024])]
+df_13to24.head()
+df_median = df_13to24.groupby('year').agg({'depth_km':'median',
+                                           'duration_magnitude_md': 'median'
+                                           }).reset_index()
+df_median
+x = df_median['year']
+y1 = df_median['depth_km']
+y2 = df_median['duration_magnitude_md']
+
+fig, ax1 = plt.subplots()
+
+ax1.plot(x, y1, 'g-', label = 'Depth in km')
+ax1.set_xlabel('Year')
+ax1.set_ylabel('Median Depth in km', color ='g')
+ax1.tick_params(axis = 'y', labelcolor = 'green')
+
+ax2 = ax1.twinx()
+
+ax2.plot(x, y2, 'b-', label = 'Magnitude')
+ax2.set_xlabel('Year')
+ax2.set_ylabel('Median Magnitude', color = 'b')
+ax2.tick_params(axis = 'y', labelcolor = 'blue')
+
+plt.title('Median Depth and Magitudes of Earthquakes at Mt. Vesuvius')
+
+fig.tight_layout()
+plt.savefig('Downloads/pydytuesday05.13.25.png')
+plt.show()
+
+
+```
+### Old Graphs and Code with NaN data excluded
 Graph:
 
 ![pydytuesday05 13 25](https://github.com/user-attachments/assets/f355bebf-9bfb-4e31-8a89-9321b3df726f)
