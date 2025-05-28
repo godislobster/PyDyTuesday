@@ -1,6 +1,6 @@
 
 
-nstall.packages('janitor')
+install.packages('janitor')
 install.packages('here')
 
 library(tidyverse)
