@@ -173,6 +173,59 @@ ggplot(df, aes(x=x, y=y)) +
 
 
 
+histo_coccoi <-hist(df_temp_date$coccoi)
+
+summary(df_temp_date$coccoi)
+#there is a 0 so I need to add a one to the total
+
+df_temp_date$log_cocoi <-log(df_temp_date$coccoi + 1)
+histo_coccoi <-hist(df_temp_date$log_cocoi)
+#far more normal
+
+corr <-cor.test(x = df_temp_date$max_temp_C, y= df_temp_date$log_cocoi, test = "pearson")
+corr
+#there is a corrolation, very weak, but significant
+
+#	Pearson's product-moment correlation
+#t = 3.2852, df = 5127, p-value = 0.001026
+#95 percent confidence interval:
+#0.01848659 0.07310861
+#cor 0.04583186 
+corr <-cor.test(x = df_temp_date$max_temp_C, y= df_temp_date$log_cocoi, method = "spearman")
+corr
+#same-ish Spearman as the non linear data which suggests the data is monotonic
+
+
+
+df<-data.frame(x = df_temp_date$max_temp_C, y = df_temp_date$log_cocoi)
+
+ggplot(df, aes(x=x, y=y)) +
+  geom_point(color = '#2980B9', alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, color ='#2c3e50') +
+  labs(
+    title = paste0(
+      'Spearman corr =', round(corr_spear, 3)),
+    x = 'Temp in C',
+    y = 'log(Number of E.coli in 100 mL)'
+  )
+
+
+ggplot(df, aes(x = x, y = y)) +
+  geom_bin2d(bins = 30) +  # heatmap: darker = more data points
+  scale_fill_viridis_c() + # nice color scale
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(
+    title = paste0(
+      'Heatmap with Linear Regression  Spearman corr =', round(corr_spear, 3)),
+    x = "Temp in C",
+    y = "log(Number of E.coli in 100 mL)"
+  ) +
+  theme_minimal()
+
+
+
+#in short the data suggests there is a small, weak association, but since hot days = more people in the water that is where the association is. While probably the wrong variable to choose, it was fun to try out heatmaps, reengage with Spearman and Pearson which I learned something new in my training. 
+
 
 
 
